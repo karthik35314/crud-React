@@ -1,6 +1,21 @@
 import React from 'react';
+import {useSelector,useDispatch} from "react-redux";
+import { deleteUser, } from './Actions/addAction';
 
-const DataItem = ({data, onEdit, onDelete}) => (
+const DataItem = ({onEdit}) =>{ 
+const dispatch = useDispatch()
+
+
+
+
+  const onDelete = user => {
+    
+       dispatch(deleteUser(user))
+  }
+  
+  const posts = useSelector((state) => state.allposts.posts);
+  console.log(posts)
+  return(
   <table>
     <thead>
       <tr>
@@ -12,7 +27,7 @@ const DataItem = ({data, onEdit, onDelete}) => (
     </thead>
     <tbody>
       {(
-        data.map(user => (
+        posts.map(user => (
           <tr key={user.name}>
             <td>{user.id}</td>
             <td>{user.name}</td>
@@ -28,6 +43,6 @@ const DataItem = ({data, onEdit, onDelete}) => (
     </tbody>
   </table>        
 );
-
+        }
 
 export default DataItem;

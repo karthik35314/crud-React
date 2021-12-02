@@ -1,16 +1,21 @@
 import React, {useState, useEffect} from 'react';
+import {useDispatch,useSelector} from 'react-redux';
+import {addUser,EditUser} from './Actions/addAction';
 
-const Modal = ({show, data, onSubmit, onCancel, editUser}) => {
-
-
+const Modal = ({show, data, onCancel, editUser, setCurrentUser}) => {
+const dispatch=useDispatch();
+const postlen = useSelector((state) => state.allposts.posts);
 
   useEffect(() => {
-    console.log(editUser);
-    if (editUser) setFormData(editUser);
+  
+    if (editUser) {
+      setFormData(editUser)
+      
+    };
   }, [editUser]);
 
   const initialFormState = () => {
-    return {id: null, name: '', contact: '',address:''};
+    return {id:null, name: '', contact: '',address:''};
   } 
   const [formData, setFormData] = useState(initialFormState);
 
@@ -20,16 +25,35 @@ const Modal = ({show, data, onSubmit, onCancel, editUser}) => {
   }
 
   const submitData = event => {
+    if (editUser) {
+      // debugger
+      event.preventDefault();
+      // formData.id=postss.length+1
+      dispatch(EditUser(formData))
+      setFormData(initialFormState)
+      onCancel();
+      setCurrentUser(null)
+      return
+     }
+    else{
     event.preventDefault();
-    onSubmit(formData);
+    // onSubmit(formData);
+    debugger
+    formData.id=postlen.length+1
+    console.log(formData);
+    dispatch(addUser(formData))
     setFormData(initialFormState)
     onCancel();
+     }
   }
 
-  const cancel = event => {
+  const cancel =() => { 
+    setCurrentUser(null)
  
     setFormData(initialFormState)
+    
     onCancel();
+  
   }
 
   return (
